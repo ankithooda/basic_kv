@@ -1,7 +1,23 @@
-server:
-	gcc -Wall ./src/server.c -o ./bin/server -lzmq 
-	./bin/server
+cc = gcc
+cflags = -Wall
+ldflags = -lzmq
+bindir = ./bin
+srcdir = ./src
+serversrc =  $(srcdir)/server.c
+clientsrc = $(srcdir)/client.c
+serverbin = server
+clientbin = client
 
-client:
-	gcc -Wall ./src/client.c -o ./bin/client -lzmq 
-	./bin/client
+$(serverbin): $(serversrc)
+	$(cc) $(cflags) $^ -o $(bindir)/$@ $(ldflags)
+	$(bindir)/$@
+
+$(clientbin): $(clientsrc)
+	$(cc) $(cflags) $^ -o $(bindir)/$@ $(ldflags)
+	$(bindir)/$@
+
+
+.PHONY: clean
+
+clean:
+	rm -f $(bindir)/$(serverbin) $(bindir)/$(clientbin)
